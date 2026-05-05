@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cwtaqkhqorwqg"]
+
+[ext_resource type="Texture2D" uid="uid://dktr85ualwu6s" path="res://Content/Icons/Items/Materials/wooden_plank.png" id="1_km06t"]
+[ext_resource type="Script" uid="uid://d1uyn18yyoa8v" path="res://Core/Items/ItemData.cs" id="2_oflmp"]
+
+[resource]
+script = ExtResource("2_oflmp")
+Id = "wooden_plank"
+DisplayName = "Доски"
+Description = "Обработанные деревянные доски для базовых построек и ремонта."
+Icon = ExtResource("1_km06t")
+Category = 0
+UsageHint = "Используется в строительстве и простых постройках."
+metadata/_custom_type_script = "uid://d1uyn18yyoa8v"

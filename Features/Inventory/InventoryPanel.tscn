@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dwhhmexreenbr"]
+
+[node name="InventoryPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InventoryRoot" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="InventoryTitleLabel" type="Label" parent="InventoryRoot"]
+layout_mode = 2
+text = "Инвентарь"
+
+[node name="SlotsGrid" type="GridContainer" parent="InventoryRoot"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 8
+
+[node name="CarryBlock" type="VBoxContainer" parent="InventoryRoot"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="CarryWeightLabel" type="Label" parent="InventoryRoot/CarryBlock"]
+layout_mode = 2
+text = "0.0 / 60.0 кг"
+
+[node name="CarryBarBackground" type="ColorRect" parent="InventoryRoot/CarryBlock"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.5, 0.5, 0.5, 0.28)
+
+[node name="CarryBarFill" type="ColorRect" parent="InventoryRoot/CarryBlock/CarryBarBackground"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2

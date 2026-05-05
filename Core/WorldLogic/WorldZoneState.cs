@@ -1,0 +1,1 @@
+public sealed class WorldZoneState { public WorldZoneKind ZoneKind{get;} public int DangerLevel{get;} public string DisplayName{get;} public WorldZoneState(WorldZoneKind kind,int danger,string name){ZoneKind=kind;DangerLevel=System.Math.Max(0,danger);DisplayName=string.IsNullOrWhiteSpace(name)?kind.ToString():name;} }

@@ -1,1 +1,27 @@
+﻿# Godot generated files
+.godot/
 
+# C# build output
+bin/
+obj/
+
+# IDE files
+.vs/
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+mono_crash.*.json
+
+# Exported builds
+builds/
+exports/
+
+# Local backup files
+*.old
+*.old.*

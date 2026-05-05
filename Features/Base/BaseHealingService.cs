@@ -1,0 +1,1 @@
+public static class BaseHealingService { public static int HealOnBase(PlayerController player, int amount=35){ if(player?.Stats==null) return 0; return player.Stats.Heal(amount); } public static int ApplyTestDamage(PlayerController player,int amount=15){ return player?.ApplyDamage(amount)??0; } }

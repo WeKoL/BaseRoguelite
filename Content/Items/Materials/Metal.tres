@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bipajgvuq2c7p"]
+
+[ext_resource type="Texture2D" uid="uid://cf4twfr1vdr2n" path="res://Content/Icons/Items/Materials/metal_profile.png" id="1_q5bew"]
+[ext_resource type="Script" uid="uid://d1uyn18yyoa8v" path="res://Core/Items/ItemData.cs" id="2_r7vm8"]
+
+[resource]
+script = ExtResource("2_r7vm8")
+Id = "metal"
+DisplayName = "Металл"
+Description = "Базовый металлический материал для укреплений, станков и деталей."
+Icon = ExtResource("1_q5bew")
+Category = 0
+UsageHint = "Используется в крафте, станках и укреплениях."
+metadata/_custom_type_script = "uid://d1uyn18yyoa8v"

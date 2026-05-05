@@ -1,0 +1,1 @@
+Создай Node2D, повесь WorldResourceNode.cs, назначь DropItem. Игрок сможет удерживать E и добывать ресурс, пока GatherCharges не станет 0.

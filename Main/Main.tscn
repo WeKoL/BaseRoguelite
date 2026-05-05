@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://yk16svcfky0r"]
+
+[ext_resource type="Script" uid="uid://3a2c1or7im8k" path="res://Main/Main.cs" id="1_db30i"]
+[ext_resource type="PackedScene" uid="uid://ct1n0g6dsf3ck" path="res://Features/Player/Player.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://qikhefojpa7y" path="res://Features/Base/BaseRoot.tscn" id="3"]
+[ext_resource type="Script" uid="uid://vm6gm2duyn35" path="res://Shared/Interaction/MenuContextInteractable.cs" id="3_5orsj"]
+[ext_resource type="PackedScene" uid="uid://c0qpynyb0j6cb" path="res://Features/Menu/GameMenu.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://byg8rm4j4c7l6" path="res://icon.svg" id="4_8eamm"]
+[ext_resource type="PackedScene" path="res://Shared/UI/SafeZoneUnloadNotification.tscn" id="5_safezone_notification"]
+[ext_resource type="PackedScene" path="res://Features/World/Pickups/WorldPickup.tscn" id="6_worldpickup"]
+[ext_resource type="Script" uid="uid://hw5jdhoisi8u" path="res://Features/Menu/CrosshairCursor.cs" id="7_p8rt5"]
+[ext_resource type="Resource" uid="uid://b2nv8o3stkslp" path="res://Content/Items/Materials/Rock.tres" id="8_rock_item"]
+[ext_resource type="Resource" uid="uid://cwtaqkhqorwqg" path="res://Content/Items/Materials/Wooden_plank.tres" id="9_plank_item"]
+[ext_resource type="Resource" uid="uid://bipajgvuq2c7p" path="res://Content/Items/Materials/Metal.tres" id="10_metal_item"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d8hyx"]
+
+[node name="Main" type="Node2D" unique_id=247817583]
+position = Vector2(28, -20)
+script = ExtResource("1_db30i")
+
+[node name="World" type="Node2D" parent="." unique_id=726006101]
+
+[node name="Ground" type="Polygon2D" parent="World" unique_id=1844885831]
+color = Color(0.34, 0.34, 0.34, 1)
+polygon = PackedVector2Array(-3000, -3000, 3000, -3000, 3000, 3000, -3000, 3000)
+
+[node name="BaseRoot" parent="World" unique_id=1815704515 instance=ExtResource("3")]
+position = Vector2(560, 0)
+
+[node name="Workbench" type="Area2D" parent="World/BaseRoot" unique_id=671447346]
+position = Vector2(35, -69)
+script = ExtResource("3_5orsj")
+FocusedBaseAction = 2
+SourceId = "workbench"
+InteractionText = "E — использовать станок"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/BaseRoot/Workbench" unique_id=1647216954]
+scale = Vector2(0.3, 0.3)
+shape = SubResource("CircleShape2D_d8hyx")
+
+[node name="Visual" type="Sprite2D" parent="World/BaseRoot/Workbench" unique_id=526748719]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("4_8eamm")
+
+[node name="med_station" type="Area2D" parent="World/BaseRoot" unique_id=419540500]
+position = Vector2(-19, -69)
+script = ExtResource("3_5orsj")
+FocusedBaseAction = 3
+SourceId = "med_station"
+InteractionText = "E — использовать медпункт"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/BaseRoot/med_station" unique_id=359694093]
+scale = Vector2(0.3, 0.3)
+shape = SubResource("CircleShape2D_d8hyx")
+
+[node name="Visual" type="Sprite2D" parent="World/BaseRoot/med_station" unique_id=2003358618]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("4_8eamm")
+
+[node name="storage_box" type="Area2D" parent="World/BaseRoot" unique_id=1102178839]
+position = Vector2(16, 21)
+script = ExtResource("3_5orsj")
+FocusedBaseAction = 1
+SourceId = "storage_box"
+InteractionText = "storage_box"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/BaseRoot/storage_box" unique_id=633473550]
+scale = Vector2(0.3, 0.3)
+shape = SubResource("CircleShape2D_d8hyx")
+
+[node name="Visual" type="Sprite2D" parent="World/BaseRoot/storage_box" unique_id=3447501]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("4_8eamm")
+
+[node name="Player" parent="World" unique_id=641520153 instance=ExtResource("2")]
+
+[node name="RockPickup" parent="World" unique_id=224170349 instance=ExtResource("6_worldpickup")]
+position = Vector2(150, -46)
+Item = ExtResource("8_rock_item")
+Amount = 12
+
+[node name="PlankPickup" parent="World" unique_id=947351805 instance=ExtResource("6_worldpickup")]
+position = Vector2(214, 48)
+Item = ExtResource("9_plank_item")
+Amount = 8
+
+[node name="MetalPickup" parent="World" unique_id=902206494 instance=ExtResource("6_worldpickup")]
+position = Vector2(84, 94)
+Item = ExtResource("10_metal_item")
+Amount = 5
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1417863272]
+
+[node name="GameMenu" parent="UI" unique_id=1059900969 instance=ExtResource("4")]
+
+[node name="SafeZoneUnloadNotification" parent="UI" unique_id=1805259412 instance=ExtResource("5_safezone_notification")]
+
+[node name="CrosshairCursor" type="Control" parent="UI" unique_id=203023365]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_p8rt5")

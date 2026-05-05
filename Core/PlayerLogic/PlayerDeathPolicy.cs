@@ -1,0 +1,1 @@
+public static class PlayerDeathPolicy { public static bool ShouldReturnToBase(PlayerStatsState stats)=>stats!=null&&stats.IsDead; public static int CalculateLostResourceAmount(int carriedAmount)=>carriedAmount<=0?0:carriedAmount/2; }

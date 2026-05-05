@@ -1,0 +1,1 @@
+public enum WorldZoneKind { Base=0, Near=1, Danger=2, Far=3 }

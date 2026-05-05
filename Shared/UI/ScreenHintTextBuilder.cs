@@ -1,0 +1,1 @@
+public static class ScreenHintTextBuilder { public static string BuildDefaultHints(bool baseMode)=>baseMode?"Tab — меню | ПКМ — действия | E — взаимодействие | База активна":"Tab — меню | E — подобрать/взаимодействовать | Вернись на базу для крафта"; }

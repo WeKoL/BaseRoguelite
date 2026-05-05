@@ -1,0 +1,1 @@
+using Xunit; public sealed class InventorySplitStackTests { [Fact] public void SplitStack_CreatesSecondStack(){ InventoryState inv=new(3,100f); inv.TryAddItem(new InventoryItemDefinition("wood",10,1f),8); Assert.True(inv.TrySplitStack(0,3)); Assert.Equal(5,inv.Slots[0].Amount); Assert.Equal(3,inv.Slots[1].Amount); } }

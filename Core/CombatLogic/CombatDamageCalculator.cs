@@ -1,0 +1,1 @@
+public static class CombatDamageCalculator { public static int CalculateFinalDamage(int rawDamage,int armor){ if(rawDamage<=0)return 0; return System.Math.Max(1, rawDamage-System.Math.Max(0,armor)); } }

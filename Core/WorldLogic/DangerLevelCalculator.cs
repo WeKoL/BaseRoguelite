@@ -1,0 +1,1 @@
+public static class DangerLevelCalculator { public static int FromDistanceToBase(float d)=>System.Math.Clamp(1+(int)(System.Math.Max(0,d)/350f),1,5); public static WorldZoneKind GetZoneKind(float d)=>d<180?WorldZoneKind.Base:d<520?WorldZoneKind.Near:d<950?WorldZoneKind.Danger:WorldZoneKind.Far; }

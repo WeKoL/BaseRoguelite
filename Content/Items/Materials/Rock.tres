@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b2nv8o3stkslp"]
+
+[ext_resource type="Texture2D" uid="uid://cfosokcpso7pm" path="res://Content/Icons/Items/Materials/rock.png" id="1_nv85k"]
+[ext_resource type="Script" uid="uid://d1uyn18yyoa8v" path="res://Core/Items/ItemData.cs" id="2_cbwan"]
+
+[resource]
+script = ExtResource("2_cbwan")
+Id = "rock"
+DisplayName = "Камень"
+Description = "Простой каменный материал для строительства и грубого крафта."
+Icon = ExtResource("1_nv85k")
+Category = 0
+UsageHint = "Используется в строительстве и некоторых рецептах."
+metadata/_custom_type_script = "uid://d1uyn18yyoa8v"

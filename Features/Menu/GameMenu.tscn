@@ -1,0 +1,370 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0qpynyb0j6cb"]
+
+[ext_resource type="Script" path="res://Features/Menu/GameMenu.cs" id="1"]
+[ext_resource type="PackedScene" uid="uid://dkaa3drc4fum0" path="res://Features/Base/StorageSubpanel.tscn" id="2_storage"]
+[ext_resource type="PackedScene" uid="uid://dgv0mqvfq7qv8" path="res://Features/Base/StorageCategorySection.tscn" id="3_section"]
+[ext_resource type="PackedScene" uid="uid://4ixu1ck8sl7x" path="res://Shared/UI/ItemCard.tscn" id="4_itemcard"]
+[ext_resource type="PackedScene" path="res://Features/Equipment/EquipmentPanel.tscn" id="5_equipment_panel"]
+
+[node name="GameMenu" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.03, 0.04, 0.07, 0.88)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RootMargin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="ViewHost" type="Control" parent="Panel/RootMargin"]
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="RootView" type="VBoxContainer" parent="Panel/RootMargin/ViewHost"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="RootHeader" type="HBoxContainer" parent="Panel/RootMargin/ViewHost/RootView"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Tabs" type="HBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="InventoryTabButton" type="Button" parent="Panel/RootMargin/ViewHost/RootView/RootHeader/Tabs"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Инвентарь"
+
+[node name="BaseTabButton" type="Button" parent="Panel/RootMargin/ViewHost/RootView/RootHeader/Tabs"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "База"
+
+[node name="JournalTabButton" type="Button" parent="Panel/RootMargin/ViewHost/RootView/RootHeader/Tabs"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Журнал"
+
+[node name="RootCloseButton" type="Button" parent="Panel/RootMargin/ViewHost/RootView/RootHeader"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+text = "×"
+
+[node name="RootContent" type="Control" parent="Panel/RootMargin/ViewHost/RootView"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="BasePanel" type="VBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="BaseTitleLabel" type="Label" parent="Panel/RootMargin/ViewHost/RootView/RootContent/BasePanel"]
+layout_mode = 2
+text = "База"
+
+[node name="BaseInfoLabel" type="Label" parent="Panel/RootMargin/ViewHost/RootView/RootContent/BasePanel"]
+layout_mode = 2
+text = "..."
+autowrap_mode = 2
+
+[node name="BaseActionCards" type="HBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent/BasePanel"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="StorageButton" type="Button" parent="Panel/RootMargin/ViewHost/RootView/RootContent/BasePanel/BaseActionCards"]
+custom_minimum_size = Vector2(220, 160)
+layout_mode = 2
+text = "Хранилище
+
+Ресурсы и материалы"
+
+[node name="CraftButton" type="Button" parent="Panel/RootMargin/ViewHost/RootView/RootContent/BasePanel/BaseActionCards"]
+custom_minimum_size = Vector2(220, 160)
+layout_mode = 2
+text = "Станки
+
+Крафт и производство"
+
+[node name="HealButton" type="Button" parent="Panel/RootMargin/ViewHost/RootView/RootContent/BasePanel/BaseActionCards"]
+custom_minimum_size = Vector2(220, 160)
+layout_mode = 2
+text = "Лечение
+
+Восстановление и обслуживание"
+
+[node name="JournalPanel" type="VBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="JournalTitleLabel" type="Label" parent="Panel/RootMargin/ViewHost/RootView/RootContent/JournalPanel"]
+layout_mode = 2
+text = "Журнал"
+
+[node name="JournalTextLabel" type="Label" parent="Panel/RootMargin/ViewHost/RootView/RootContent/JournalPanel"]
+layout_mode = 2
+text = "Журнал пока заглушка."
+autowrap_mode = 2
+
+[node name="InventoryPanel" type="Control" parent="Panel/RootMargin/ViewHost/RootView/RootContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InventoryRoot" type="VBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="InventoryTitleLabel" type="Label" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot"]
+layout_mode = 2
+text = "Инвентарь"
+
+[node name="InventoryBody" type="HBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+
+[node name="InventoryLeft" type="VBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot/InventoryBody"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="SlotsGrid" type="GridContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot/InventoryBody/InventoryLeft"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 8
+
+[node name="CarryBlock" type="VBoxContainer" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot/InventoryBody/InventoryLeft"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="CarryWeightLabel" type="Label" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot/InventoryBody/InventoryLeft/CarryBlock"]
+layout_mode = 2
+text = "0.0 / 60.0 кг"
+
+[node name="CarryBarBackground" type="ColorRect" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot/InventoryBody/InventoryLeft/CarryBlock"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.5, 0.5, 0.5, 0.28)
+
+[node name="CarryBarFill" type="ColorRect" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot/InventoryBody/InventoryLeft/CarryBlock/CarryBarBackground"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+
+[node name="EquipmentPanel" parent="Panel/RootMargin/ViewHost/RootView/RootContent/InventoryPanel/InventoryRoot/InventoryBody" instance=ExtResource("5_equipment_panel")]
+layout_mode = 2
+
+[node name="SubView" type="VBoxContainer" parent="Panel/RootMargin/ViewHost"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="SubHeader" type="HBoxContainer" parent="Panel/RootMargin/ViewHost/SubView"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="SubTitleLabel" type="Label" parent="Panel/RootMargin/ViewHost/SubView/SubHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Раздел"
+
+[node name="SubCloseButton" type="Button" parent="Panel/RootMargin/ViewHost/SubView/SubHeader"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+text = "×"
+
+[node name="SubContent" type="Control" parent="Panel/RootMargin/ViewHost/SubView"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="StorageSubpanel" parent="Panel/RootMargin/ViewHost/SubView/SubContent" instance=ExtResource("2_storage")]
+layout_mode = 1
+StorageCategorySectionScene = ExtResource("3_section")
+ItemCardScene = ExtResource("4_itemcard")
+
+[node name="CraftSubpanel" type="VBoxContainer" parent="Panel/RootMargin/ViewHost/SubView/SubContent"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="CraftLabel" type="Label" parent="Panel/RootMargin/ViewHost/SubView/SubContent/CraftSubpanel"]
+layout_mode = 2
+text = "Станки пока каркасные. Здесь позже будет список станков, крафт и производство."
+autowrap_mode = 2
+
+[node name="HealSubpanel" type="VBoxContainer" parent="Panel/RootMargin/ViewHost/SubView/SubContent"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="HealLabel" type="Label" parent="Panel/RootMargin/ViewHost/SubView/SubContent/HealSubpanel"]
+layout_mode = 2
+text = "Лечение пока каркасное. Здесь позже будет восстановление, лечение и обслуживание базы."
+autowrap_mode = 2
+
+[editable path="Panel/RootMargin/ViewHost/SubView/SubContent/StorageSubpanel"]
+
+[node name="SharedContextMenu" type="PanelContainer" parent="."]
+visible = false
+top_level = true
+z_index = 500
+mouse_filter = 2
+
+[node name="MenuMargin" type="MarginContainer" parent="SharedContextMenu"]
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="MenuButtons" type="VBoxContainer" parent="SharedContextMenu/MenuMargin"]
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="EquipButton" type="Button" parent="SharedContextMenu/MenuMargin/MenuButtons"]
+visible = false
+text = "Надеть"
+custom_minimum_size = Vector2(120, 0)
+
+[node name="UnequipButton" type="Button" parent="SharedContextMenu/MenuMargin/MenuButtons"]
+visible = false
+text = "Снять"
+custom_minimum_size = Vector2(120, 0)
+
+[node name="DropButton" type="Button" parent="SharedContextMenu/MenuMargin/MenuButtons"]
+visible = false
+text = "Выкинуть"
+custom_minimum_size = Vector2(120, 0)
+
+[node name="InfoButton" type="Button" parent="SharedContextMenu/MenuMargin/MenuButtons"]
+visible = false
+text = "Информация"
+custom_minimum_size = Vector2(120, 0)
+
+[node name="SharedItemInfoDialog" type="AcceptDialog" parent="."]
+title = "Информация о предмете"
+size = Vector2i(420, 260)
+
+[node name="InfoContent" type="Label" parent="SharedItemInfoDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 2
+autowrap_mode = 3
+vertical_alignment = 0
+text = ""

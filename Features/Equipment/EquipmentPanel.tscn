@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://chkl5f4tp4q2l"]
+
+[ext_resource type="Script" uid="uid://b1dmauiei0kwe" path="res://Features/Equipment/EquipmentPanel.cs" id="1"]
+[ext_resource type="PackedScene" uid="uid://7hnj5677r0hb" path="res://Features/Equipment/EquipmentSlotView.tscn" id="2_slot"]
+
+[node name="EquipmentPanel" type="Control" unique_id=1604449852]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1")
+
+[node name="PanelRoot" type="VBoxContainer" parent="." unique_id=676501120]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -250.0
+offset_right = 240.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="TopGrid" type="GridContainer" parent="PanelRoot" unique_id=52001492]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="CapeSlot" parent="PanelRoot/TopGrid" unique_id=1279187505 instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="HeadSlot" parent="PanelRoot/TopGrid" unique_id=766154745 instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="BackpackSlot" parent="PanelRoot/TopGrid" unique_id=1717435230 instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="PrimaryWeaponSlot" parent="PanelRoot/TopGrid" unique_id=1333371810 instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="ChestSlot" parent="PanelRoot/TopGrid" unique_id=1249634834 instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="SecondaryWeaponSlot" parent="PanelRoot/TopGrid" unique_id=659909780 instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="BottomRow" type="HBoxContainer" parent="PanelRoot" unique_id=1747580007]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LeftSpacer" type="Control" parent="PanelRoot/BottomRow" unique_id=1362313054]
+custom_minimum_size = Vector2(150, 1)
+layout_mode = 2
+
+[node name="BootsSlot" parent="PanelRoot/BottomRow" unique_id=1660837367 instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="RightSpacer" type="Control" parent="PanelRoot/BottomRow" unique_id=2002851036]
+custom_minimum_size = Vector2(150, 1)
+layout_mode = 2

@@ -1,0 +1,1 @@
+public sealed class SaveSlotItemData { public string ItemId{get;set;}=""; public int Amount{get;set;} public int MaxStackSize{get;set;} public float WeightPerUnit{get;set;} }

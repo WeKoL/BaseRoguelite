@@ -1,0 +1,1 @@
+public sealed class CraftResult { public bool Succeeded {get;} public string Reason {get;} public CraftResult(bool succeeded,string reason=""){Succeeded=succeeded;Reason=reason??"";} public static CraftResult Success()=>new(true); public static CraftResult Fail(string reason)=>new(false,reason); }

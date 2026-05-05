@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+[ext_resource type="Script" uid="uid://d1uyn18yyoa8v" path="res://Core/Items/ItemData.cs" id="1_itemdata"]
+[resource]
+script = ExtResource("1_itemdata")
+Id = "simple_medkit"
+DisplayName = "Простая аптечка"
+Description = "Тестовая аптечка для проверки действия Использовать."
+Category = 2
+MaxStackSize = 5
+Weight = 0.5
+UsageHint = "ПКМ → Использовать."
+IsConsumable = true
+HealthRestore = 25
+metadata/_custom_type_script = "uid://d1uyn18yyoa8v"

@@ -1,0 +1,1 @@
+using Xunit; public sealed class PlayerStatsStateTests { [Fact] public void Damage_ArmorKeepsMinimumOneDamage(){ PlayerStatsState s=new(100,999); Assert.Equal(1,s.TakeDamage(10)); Assert.Equal(99,s.CurrentHealth); } [Fact] public void Heal_DoesNotExceedMax(){ PlayerStatsState s=new(100); s.TakeDamage(30); Assert.Equal(30,s.Heal(999)); Assert.Equal(100,s.CurrentHealth); } }
