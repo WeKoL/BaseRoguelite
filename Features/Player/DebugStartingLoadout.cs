@@ -7,6 +7,8 @@ public static class DebugStartingLoadout
 		TryAdd(inventory, catalog, "wooden_plank", 8);
 		TryAdd(inventory, catalog, "metal", 5);
 		TryAdd(inventory, catalog, "simple_medkit", 2);
+		TryAdd(inventory, catalog, "canned_food", 2);
+		TryAdd(inventory, catalog, "water_bottle", 2);
 	}
 	private static void TryAdd(PlayerInventoryState inventory, ItemCatalog catalog, string itemId, int amount)
 	{

@@ -63,6 +63,19 @@ public partial class GameMenu : Control
 	private Label _craftInfoLabel;
 	private Button _craftMedkitButton;
 	private Button _craftPlateButton;
+	private Button _craftRepairKitButton;
+	private Button _craftGeneratorPartButton;
+	private Button _craftRationButton;
+	private Button _craftWaterFilterButton;
+	private Button _craftToolKitButton;
+	private Button _craftAmmoPackButton;
+	private Button _craftCampBeaconButton;
+	private Button _upgradeStorageButton;
+	private Button _upgradeWorkbenchButton;
+	private Button _upgradeMedbayButton;
+	private Button _upgradeGeneratorButton;
+	private Button _upgradeRadioTowerButton;
+	private Button _upgradeDefensiveWallsButton;
 	private Label _healInfoLabel;
 	private Button _healNowButton;
 
@@ -147,6 +160,32 @@ public partial class GameMenu : Control
 			_craftMedkitButton.Pressed += () => TryCraftById("craft_simple_medkit");
 		if (_craftPlateButton != null)
 			_craftPlateButton.Pressed += () => TryCraftById("craft_reinforced_plate");
+		if (_craftRepairKitButton != null)
+			_craftRepairKitButton.Pressed += () => TryCraftById("craft_repair_kit");
+		if (_craftGeneratorPartButton != null)
+			_craftGeneratorPartButton.Pressed += () => TryCraftById("craft_generator_part");
+		if (_craftRationButton != null)
+			_craftRationButton.Pressed += () => TryCraftById("craft_field_ration");
+		if (_craftWaterFilterButton != null)
+			_craftWaterFilterButton.Pressed += () => TryCraftById("craft_water_filter");
+		if (_craftToolKitButton != null)
+			_craftToolKitButton.Pressed += () => TryCraftById("craft_tool_kit");
+		if (_craftAmmoPackButton != null)
+			_craftAmmoPackButton.Pressed += () => TryCraftById("craft_ammo_pack");
+		if (_craftCampBeaconButton != null)
+			_craftCampBeaconButton.Pressed += () => TryCraftById("craft_camp_beacon");
+		if (_upgradeStorageButton != null)
+			_upgradeStorageButton.Pressed += () => TryUpgradeById("storage_box");
+		if (_upgradeWorkbenchButton != null)
+			_upgradeWorkbenchButton.Pressed += () => TryUpgradeById("workbench");
+		if (_upgradeMedbayButton != null)
+			_upgradeMedbayButton.Pressed += () => TryUpgradeById("medical_station");
+		if (_upgradeGeneratorButton != null)
+			_upgradeGeneratorButton.Pressed += () => TryUpgradeById("generator");
+		if (_upgradeRadioTowerButton != null)
+			_upgradeRadioTowerButton.Pressed += () => TryUpgradeById("radio_tower");
+		if (_upgradeDefensiveWallsButton != null)
+			_upgradeDefensiveWallsButton.Pressed += () => TryUpgradeById("defensive_walls");
 		if (_healNowButton != null)
 			_healNowButton.Pressed += TryHealPlayerAtBase;
 
@@ -632,15 +671,114 @@ public partial class GameMenu : Control
 		};
 	}
 
+
+	private string BuildInventoryInfoText(ItemData item, int amount)
+	{
+		if (item == null)
+			return "Информация о предмете недоступна.";
+
+		string totalWeightText = amount > 1
+			? $"\nОбщий вес: {item.Weight * amount:0.##} кг"
+			: string.Empty;
+
+		string useText = item.CanUse()
+			? $"\nЭффект: HP +{item.HealthRestore}, еда +{item.FoodRestore}, вода +{item.WaterRestore}, стамина +{item.StaminaRestore}"
+			: string.Empty;
+
+		string equipText = item.CanEquip()
+			? $"\nЭкипировка: слот {BuildEquipmentSlotText(item.EquipSlotId)}, прочность {item.EquipmentMaxDurability}/{item.EquipmentMaxDurability}"
+			: string.Empty;
+
+		string hintText = string.IsNullOrWhiteSpace(item.UsageHint)
+			? string.Empty
+			: $"\nПодсказка: {item.UsageHint}";
+
+		string description = string.IsNullOrWhiteSpace(item.Description)
+			? "Описание пока не заполнено."
+			: item.Description;
+
+		return
+			$"Название: {item.DisplayName}\n" +
+			$"Id: {item.Id}\n" +
+			$"Категория: {item.GetDisplayCategory()}\n" +
+			$"Редкость: {BuildRarityText(item.Rarity)}\n" +
+			$"Количество: {amount}\n" +
+			$"Вес за единицу: {item.Weight:0.##} кг" +
+			totalWeightText +
+			$"\nМаксимум в стаке: {item.MaxStackSize}" +
+			useText +
+			equipText +
+			hintText +
+			$"\n\n{description}";
+	}
+
+	private string BuildEquipmentInfoText(EquippedItemViewData equipped)
+	{
+		if (equipped == null)
+			return "Информация об экипировке недоступна.";
+
+		ItemData item = equipped.SourceItem;
+		string durabilityText = equipped.MaxDurability <= 0
+			? "Прочность: неизвестно"
+			: $"Прочность: {equipped.CurrentDurability}/{equipped.MaxDurability}";
+
+		string sourceText = item == null
+			? string.Empty
+			: $"\nКатегория: {item.GetDisplayCategory()}\nРедкость: {BuildRarityText(item.Rarity)}\nВес: {item.Weight:0.##} кг";
+
+		string description = item == null || string.IsNullOrWhiteSpace(item.Description)
+			? "Описание пока не заполнено."
+			: item.Description;
+
+		return
+			$"Название: {equipped.DisplayName}\n" +
+			$"Слот: {BuildEquipmentSlotText(equipped.SlotId)}\n" +
+			durabilityText +
+			sourceText +
+			$"\n\n{description}";
+	}
+
+	private static string BuildEquipmentSlotText(EquipmentSlotId slotId)
+	{
+		return slotId switch
+		{
+			EquipmentSlotId.Cape => "Плащ",
+			EquipmentSlotId.Head => "Голова",
+			EquipmentSlotId.Backpack => "Рюкзак",
+			EquipmentSlotId.PrimaryWeapon => "Основное оружие",
+			EquipmentSlotId.Chest => "Корпус",
+			EquipmentSlotId.SecondaryWeapon => "Доп. оружие",
+			EquipmentSlotId.Boots => "Ботинки",
+			_ => slotId.ToString()
+		};
+	}
+
+	private static string BuildRarityText(ItemRarity rarity)
+	{
+		return rarity switch
+		{
+			ItemRarity.Common => "Обычный",
+			ItemRarity.Rare => "Редкий",
+			ItemRarity.SuperRare => "Очень редкий",
+			ItemRarity.Epic => "Эпический",
+			ItemRarity.Legendary => "Легендарный",
+			_ => rarity.ToString()
+		};
+	}
+
 	private string BuildBaseInfoText(bool onBase)
 	{
 		int storageStacks = _baseRoot?.GetStorageEntries()?.Count ?? 0;
 		string healthText = _player == null
 			? "HP: ?"
-			: $"HP: {_player.Stats.CurrentHealth}/{_player.Stats.MaxHealth}";
+			: $"HP: {_player.Stats.CurrentHealth}/{_player.Stats.MaxHealth} | Еда: {_player.Needs.Food}/{_player.Needs.MaxFood} | Вода: {_player.Needs.Water}/{_player.Needs.MaxWater}";
+
+		string upgrades = _baseRoot == null
+			? ""
+			: $" | База ур. {_baseRoot.Progress.BaseLevel}, склад {_baseRoot.Progress.GetUpgradeLevel("storage_box")}, верстак {_baseRoot.Progress.GetUpgradeLevel("workbench")}, медпункт {_baseRoot.Progress.GetUpgradeLevel("medical_station")}, генератор {_baseRoot.Progress.GetUpgradeLevel("generator")}, радио {_baseRoot.Progress.GetUpgradeLevel("radio_tower")}, стены {_baseRoot.Progress.GetUpgradeLevel("defensive_walls")}";
 
 		return onBase
-			? $"Игрок на базе. Действия доступны. {healthText}. В хранилище стаков: {storageStacks}."
+			? $"Игрок на базе. Действия доступны. {healthText}. В хранилище стаков: {storageStacks}.{upgrades}."
 			: $"Игрок вне базы. Базовые действия заблокированы. {healthText}. Вернись в зелёную безопасную зону.";
 	}
 
@@ -653,14 +791,41 @@ public partial class GameMenu : Control
 
 			_craftInfoLabel = new Label
 			{
-				Text = "Крафт из ресурсов хранилища базы.",
+				Text = "Крафт и улучшения из ресурсов хранилища базы.",
 				AutowrapMode = TextServer.AutowrapMode.WordSmart
 			};
-			_craftMedkitButton = new Button { Text = "Создать простую аптечку: 2 доски + 1 металл" };
-			_craftPlateButton = new Button { Text = "Создать усиленную пластину: 2 камня + 2 металла" };
+			_craftMedkitButton = new Button { Text = "Крафт: аптечка — 2 доски + 1 металл" };
+			_craftPlateButton = new Button { Text = "Крафт: пластина — 2 камня + 2 металла" };
+			_craftRepairKitButton = new Button { Text = "Крафт: ремонтный набор — нужен верстак" };
+			_craftGeneratorPartButton = new Button { Text = "Крафт: деталь генератора — нужен верстак" };
+			_craftRationButton = new Button { Text = "Крафт: рацион — нужен медпункт" };
+			_craftWaterFilterButton = new Button { Text = "Крафт 0.3: фильтр воды — нужен верстак" };
+			_craftToolKitButton = new Button { Text = "Крафт 0.3: набор инструментов — верстак ур.2" };
+			_craftAmmoPackButton = new Button { Text = "Крафт 0.3: боеприпасы — нужен верстак" };
+			_craftCampBeaconButton = new Button { Text = "Крафт 0.3: маяк лагеря — нужен генератор" };
+			_upgradeStorageButton = new Button { Text = "Улучшить: хранилище" };
+			_upgradeWorkbenchButton = new Button { Text = "Улучшить: верстак" };
+			_upgradeMedbayButton = new Button { Text = "Улучшить: медпункт" };
+			_upgradeGeneratorButton = new Button { Text = "Улучшить: генератор" };
+			_upgradeRadioTowerButton = new Button { Text = "Улучшить 0.3: радиомачта" };
+			_upgradeDefensiveWallsButton = new Button { Text = "Улучшить 0.3: стены базы" };
 			craftBox.AddChild(_craftInfoLabel);
 			craftBox.AddChild(_craftMedkitButton);
 			craftBox.AddChild(_craftPlateButton);
+			craftBox.AddChild(_craftRepairKitButton);
+			craftBox.AddChild(_craftGeneratorPartButton);
+			craftBox.AddChild(_craftRationButton);
+			craftBox.AddChild(_craftWaterFilterButton);
+			craftBox.AddChild(_craftToolKitButton);
+			craftBox.AddChild(_craftAmmoPackButton);
+			craftBox.AddChild(_craftCampBeaconButton);
+			craftBox.AddChild(new HSeparator());
+			craftBox.AddChild(_upgradeStorageButton);
+			craftBox.AddChild(_upgradeWorkbenchButton);
+			craftBox.AddChild(_upgradeMedbayButton);
+			craftBox.AddChild(_upgradeGeneratorButton);
+			craftBox.AddChild(_upgradeRadioTowerButton);
+			craftBox.AddChild(_upgradeDefensiveWallsButton);
 		}
 
 		if (_healSubpanel is VBoxContainer healBox)
@@ -670,10 +835,10 @@ public partial class GameMenu : Control
 
 			_healInfoLabel = new Label
 			{
-				Text = "Медпункт восстанавливает здоровье, когда игрок на базе.",
+				Text = "Медпункт восстанавливает здоровье. Улучшение медпункта увеличивает лечение.",
 				AutowrapMode = TextServer.AutowrapMode.WordSmart
 			};
-			_healNowButton = new Button { Text = "Полечиться: +25 HP" };
+			_healNowButton = new Button { Text = "Полечиться" };
 			healBox.AddChild(_healInfoLabel);
 			healBox.AddChild(_healNowButton);
 		}
@@ -691,12 +856,25 @@ public partial class GameMenu : Control
 		{
 			_healInfoLabel.Text = _player == null
 				? "HP неизвестно."
-				: $"Текущее здоровье: {_player.Stats.CurrentHealth}/{_player.Stats.MaxHealth}.";
+				: $"Текущее здоровье: {_player.Stats.CurrentHealth}/{_player.Stats.MaxHealth}. Сила лечения: {BaseFacilityEffectCalculator.GetHealingAmount(_baseRoot?.Progress?.GetUpgradeLevel("medical_station") ?? 0)} HP.";
 		}
 
 		bool canUseBaseActions = CanUseBaseActions();
 		if (_craftMedkitButton != null) _craftMedkitButton.Disabled = !canUseBaseActions;
 		if (_craftPlateButton != null) _craftPlateButton.Disabled = !canUseBaseActions;
+		if (_craftRepairKitButton != null) _craftRepairKitButton.Disabled = !canUseBaseActions;
+		if (_craftGeneratorPartButton != null) _craftGeneratorPartButton.Disabled = !canUseBaseActions;
+		if (_craftRationButton != null) _craftRationButton.Disabled = !canUseBaseActions;
+		if (_craftWaterFilterButton != null) _craftWaterFilterButton.Disabled = !canUseBaseActions;
+		if (_craftToolKitButton != null) _craftToolKitButton.Disabled = !canUseBaseActions;
+		if (_craftAmmoPackButton != null) _craftAmmoPackButton.Disabled = !canUseBaseActions;
+		if (_craftCampBeaconButton != null) _craftCampBeaconButton.Disabled = !canUseBaseActions;
+		if (_upgradeStorageButton != null) _upgradeStorageButton.Disabled = !canUseBaseActions;
+		if (_upgradeWorkbenchButton != null) _upgradeWorkbenchButton.Disabled = !canUseBaseActions;
+		if (_upgradeMedbayButton != null) _upgradeMedbayButton.Disabled = !canUseBaseActions;
+		if (_upgradeGeneratorButton != null) _upgradeGeneratorButton.Disabled = !canUseBaseActions;
+		if (_upgradeRadioTowerButton != null) _upgradeRadioTowerButton.Disabled = !canUseBaseActions;
+		if (_upgradeDefensiveWallsButton != null) _upgradeDefensiveWallsButton.Disabled = !canUseBaseActions;
 		if (_healNowButton != null) _healNowButton.Disabled = !canUseBaseActions || _player == null || _player.Stats.CurrentHealth >= _player.Stats.MaxHealth;
 	}
 
@@ -718,11 +896,48 @@ public partial class GameMenu : Control
 			{
 				_craftInfoLabel.Text = result.Succeeded
 					? $"Создано: {recipe.DisplayName}. Результат добавлен в хранилище."
-					: $"Не удалось создать {recipe.DisplayName}: не хватает ресурсов.";
+					: $"Не удалось создать {recipe.DisplayName}: {BuildCraftFailText(result.Reason)}.";
 			}
 
 			return;
 		}
+	}
+
+	private void TryUpgradeById(string upgradeId)
+	{
+		if (_baseRoot == null || _player == null || !CanUseBaseActions())
+			return;
+
+		foreach (BaseUpgradeDefinition upgrade in BasicBaseUpgradeCatalog.CreateUpgrades())
+		{
+			if (upgrade.Id != upgradeId)
+				continue;
+
+			bool upgraded = _baseRoot.TryUpgrade(upgrade);
+			RefreshStorageData();
+			RefreshCraftAndHealPanelText();
+			_baseInfoLabel.Text = BuildBaseInfoText(_player.IsInsideBase);
+
+			if (_craftInfoLabel != null)
+			{
+				_craftInfoLabel.Text = upgraded
+					? $"Улучшение выполнено: {upgrade.DisplayName}."
+					: $"Не удалось улучшить {upgrade.DisplayName}: не хватает ресурсов.";
+			}
+
+			return;
+		}
+	}
+
+	private static string BuildCraftFailText(string reason)
+	{
+		return reason switch
+		{
+			"station_required" => "требуется станок или уровень базы",
+			"storage_full" => "хранилище заполнено",
+			"not_enough_resources" => "не хватает ресурсов",
+			_ => "условия не выполнены"
+		};
 	}
 
 	private void TryHealPlayerAtBase()
@@ -730,7 +945,8 @@ public partial class GameMenu : Control
 		if (_player == null || !CanUseBaseActions())
 			return;
 
-		bool healed = _player.HealAtBase(25);
+		int healAmount = BaseFacilityEffectCalculator.GetHealingAmount(_baseRoot?.Progress?.GetUpgradeLevel("medical_station") ?? 0);
+		bool healed = _player.HealAtBase(healAmount);
 		RefreshCraftAndHealPanelText();
 		_baseInfoLabel.Text = BuildBaseInfoText(_player.IsInsideBase);
 
@@ -743,84 +959,15 @@ public partial class GameMenu : Control
 	private string BuildJournalText()
 	{
 		return
-			"Тестовые цели версии 3.0 видимого патча:\n" +
-			"1. Подойди к камню, доскам или металлолому и удерживай E — ресурс добывается в инвентарь.\n" +
-			"2. Вернись в зелёную зону базы — ресурсы автоматически уйдут в хранилище.\n" +
-			"3. На базе открой База → Станки и создай аптечку или пластину.\n" +
-			"4. Подойди к красной зоне: сверху появится название опасной зоны.\n" +
-			"5. ЛКМ рядом с врагом — тестовый удар ближнего боя.";
-	}
-
-	private static string BuildInventoryInfoText(ItemData item, int amount)
-	{
-		string description = string.IsNullOrWhiteSpace(item.Description)
-			? "Без описания."
-			: item.Description;
-
-		string usageHint = string.IsNullOrWhiteSpace(item.UsageHint)
-			? string.Empty
-			: $"\nПодсказка: {item.UsageHint}";
-
-		string equipText = item.CanEquip()
-			? $"\nЭкипировка: да ({GetEquipSlotText(item.EquipSlotId)})\nПрочность: {item.EquipmentMaxDurability}"
-			: "\nЭкипировка: нет";
-
-		return
-			$"Название: {item.DisplayName}\n" +
-			$"Количество: {amount}\n" +
-			$"Категория: {item.GetDisplayCategory()}\n" +
-			$"Редкость: {GetRarityText(item.Rarity)}\n" +
-			$"Вес одной единицы: {item.Weight:0.##}" +
-			$"{equipText}\n\n" +
-			$"{description}{usageHint}";
-	}
-
-	private static string BuildEquipmentInfoText(EquippedItemViewData equipped)
-	{
-		ItemData item = equipped.SourceItem;
-		string category = item?.GetDisplayCategory() ?? "Предмет";
-		string description = string.IsNullOrWhiteSpace(item?.Description)
-			? "Без описания."
-			: item.Description;
-
-		string usageHint = string.IsNullOrWhiteSpace(item?.UsageHint)
-			? string.Empty
-			: $"\nПодсказка: {item.UsageHint}";
-
-		return
-			$"Название: {equipped.DisplayName}\n" +
-			$"Слот: {GetEquipSlotText(equipped.SlotId)}\n" +
-			$"Категория: {category}\n" +
-			$"Прочность: {equipped.CurrentDurability}/{equipped.MaxDurability}\n" +
-			$"Вес одной единицы: {item?.Weight:0.##}\n\n" +
-			$"{description}{usageHint}";
-	}
-
-	private static string GetEquipSlotText(EquipmentSlotId slotId)
-	{
-		return slotId switch
-		{
-			EquipmentSlotId.Cape => "Плащ",
-			EquipmentSlotId.Head => "Шлем",
-			EquipmentSlotId.Backpack => "Рюкзак",
-			EquipmentSlotId.PrimaryWeapon => "Оружие 1",
-			EquipmentSlotId.Chest => "Броня",
-			EquipmentSlotId.SecondaryWeapon => "Оружие 2",
-			EquipmentSlotId.Boots => "Ботинки",
-			_ => "Слот"
-		};
-	}
-
-	private static string GetRarityText(ItemRarity rarity)
-	{
-		return rarity switch
-		{
-			ItemRarity.Common => "Обычный",
-			ItemRarity.Rare => "Редкий",
-			ItemRarity.SuperRare => "Очень редкий",
-			ItemRarity.Epic => "Эпический",
-			ItemRarity.Legendary => "Легендарный",
-			_ => "Неизвестно"
-		};
-	}
-}
+			"Цели версии 0.3.0:\n" +
+			"1. Проверь полный цикл: добыча → база → хранилище → крафт → улучшение.\n" +
+			"2. Новые рецепты 0.3: фильтр воды, набор инструментов, боеприпасы, маяк лагеря.\n" +
+			"3. Новые улучшения 0.3: радиомачта и укреплённые стены базы.\n" +
+			"4. Системы под капотом: ремонт экипировки, резервы склада, очередь крафта, открытие рецептов.\n" +
+			"5. Выживание расширено: статус-эффекты, оценка риска, инструменты и биомы ресурсов.\n" +
+			"6. Бой расширен: дальняя атака, боеприпасы и планировщик волн врагов.\n" +
+			"7. Мир расширен: план тайлов карты и точки интереса по уровню опасности.\n" +
+			"8. База расширена: энергия, оборона, рейды и потери ресурсов.\n" +
+			"9. Сохранения расширены до save version 5: diff, backup policy, миграция старых данных.\n" +
+			"10. Для проверки логики запусти тесты Version030BranchTests. Коммит: version 0.3.0: expand all development branches.";
+	}}

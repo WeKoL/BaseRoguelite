@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+[ext_resource type="Script" uid="uid://d1uyn18yyoa8v" path="res://Core/Items/ItemData.cs" id="1_itemdata"]
+[resource]
+script = ExtResource("1_itemdata")
+Id = "canned_food"
+DisplayName = "Консервы"
+Description = "Простая еда для вылазки. Восстанавливает сытость."
+Category = 2
+MaxStackSize = 8
+Weight = 0.7
+UsageHint = "ПКМ → Использовать или H для быстрого расходника."
+IsConsumable = true
+FoodRestore = 35
+metadata/_custom_type_script = "uid://d1uyn18yyoa8v"

@@ -68,12 +68,21 @@ public partial class Main : Node2D
 		ItemData rock = catalog.GetOrFallback("rock", 99, 1.0f);
 		ItemData wood = catalog.GetOrFallback("wooden_plank", 99, 1.0f);
 		ItemData metal = catalog.GetOrFallback("metal", 99, 1.0f);
+		ItemData food = catalog.GetOrFallback("canned_food", 8, 0.7f);
+		ItemData water = catalog.GetOrFallback("water_bottle", 8, 0.6f);
+		ItemData ammo = catalog.GetOrFallback("ammo_pack", 5, 1.2f);
+		ItemData toolKit = catalog.GetOrFallback("tool_kit", 3, 2.0f);
 
 		CreateResourceNode(root, new Vector2(-220f, -120f), "Каменная жила", rock, 2, 4, new Color(0.65f, 0.65f, 0.72f));
 		CreateResourceNode(root, new Vector2(-270f, 80f), "Куча досок", wood, 2, 4, new Color(0.64f, 0.43f, 0.25f));
 		CreateResourceNode(root, new Vector2(-360f, -20f), "Металлолом", metal, 1, 5, new Color(0.55f, 0.62f, 0.68f));
+		CreateResourceNode(root, new Vector2(-430f, 140f), "Забытый ящик еды", food, 1, 3, new Color(0.75f, 0.55f, 0.25f));
+		CreateResourceNode(root, new Vector2(-130f, 130f), "Запас воды", water, 1, 3, new Color(0.35f, 0.65f, 1.0f));
+		CreateResourceNode(root, new Vector2(-700f, -130f), "Военный ящик 0.3", ammo, 1, 2, new Color(0.35f, 0.75f, 0.35f));
+		CreateResourceNode(root, new Vector2(-760f, 160f), "Технический ящик 0.3", toolKit, 1, 1, new Color(0.9f, 0.7f, 0.25f));
 		CreateDangerZone(root);
 		CreateEnemy(root, new Vector2(-520f, -30f));
+		CreateEnemy(root, new Vector2(-620f, 90f));
 	}
 
 	private void CreateResourceNode(Node parent, Vector2 position, string displayName, ItemData item, int amount, int charges, Color color)
@@ -194,7 +203,7 @@ public partial class Main : Node2D
 		{
 			Name = "VisibleV30Status",
 			Position = new Vector2(18f, 18f),
-			Size = new Vector2(560f, 120f),
+			Size = new Vector2(720f, 150f),
 			Text = ""
 		};
 		_debugStatusLabel.AddThemeFontSizeOverride("font_size", 15);

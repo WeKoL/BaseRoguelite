@@ -16,7 +16,7 @@ public sealed class Version30SaveTests
 	{
 		SaveGameData data = new() { Version = 1, PlayerMaxHealth = 10, PlayerHealth = 10 };
 		SaveGameData migrated = SaveGameMigrationService.Migrate(data);
-		Assert.Equal(3, migrated.Version);
+		Assert.Equal(5, migrated.Version);
 		Assert.Equal(100, migrated.PlayerMaxStamina);
 		Assert.Equal(VersionInfo.Version, migrated.BuildVersion);
 	}

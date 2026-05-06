@@ -61,6 +61,7 @@ public partial class PlayerController : CharacterBody2D
 	private PlayerInventoryState _inventory;
 	private ItemCatalog _itemCatalog;
 	private readonly PlayerStatsState _stats = new(100);
+	private readonly SurvivalNeedsState _needs = new(100, 100);
 	private WorldZoneState _currentZone;
 	private readonly EquipmentState _equipment = new();
 	private readonly Dictionary<string, ItemData> _equippedItemLookup = new();
@@ -68,10 +69,14 @@ public partial class PlayerController : CharacterBody2D
 	private float _staminaRegenBuffer;
 	private float _combatMessageTimer;
 	private string _lastCombatMessage = "ЛКМ — ударить ближайшего врага";
+	private float _needsTickBuffer;
+	private float _sprintSpendBuffer;
+	private bool _isSprinting;
 
 	public PlayerInventoryState Inventory => _inventory;
 	public ItemCatalog ItemCatalog => _itemCatalog;
 	public PlayerStatsState Stats => _stats;
+	public SurvivalNeedsState Needs => _needs;
 	public WorldZoneState CurrentZone => _currentZone;
 	public EquipmentState Equipment => _equipment;
 	
@@ -121,6 +126,13 @@ public partial class PlayerController : CharacterBody2D
 		if (!keyEvent.Pressed || keyEvent.Echo)
 			return;
 
+		if (@event.IsActionPressed("quick_use"))
+		{
+			if (TryUseBestConsumable())
+				GetViewport().SetInputAsHandled();
+			return;
+		}
+
 		if (!@event.IsActionPressed("interact"))
 			return;
 
@@ -161,6 +173,7 @@ public partial class PlayerController : CharacterBody2D
 		UpdateVisualRotation(dt);
 		UpdateCameraOffset(dt);
 		UpdateCombatTimers(dt);
+		UpdateSurvivalNeeds(dt);
 	}
 
 	public void BindGameMenu(GameMenu gameMenu)
@@ -189,13 +202,14 @@ public partial class PlayerController : CharacterBody2D
 			: $"Зона: {_currentZone.DisplayName} | опасность {_currentZone.DangerLevel}";
 
 		string baseText = IsInsideBase ? "База: внутри, меню базы доступно" : "База: вне базы";
+		string needsText = $"Еда: {_needs.Food}/{_needs.MaxFood} | Вода: {_needs.Water}/{_needs.MaxWater}";
 		string interactionText = GetInteractionPrompt();
 		if (string.IsNullOrWhiteSpace(interactionText))
 			interactionText = "E — подобрать ближайший предмет / удерживать E у объекта";
 
 		return
-			$"HP: {_stats.CurrentHealth}/{_stats.MaxHealth} | Стамина: {_stats.CurrentStamina}/{_stats.MaxStamina}\n" +
-			$"{zoneText} | {baseText}\n" +
+			$"HP: {_stats.CurrentHealth}/{_stats.MaxHealth} | Стамина: {_stats.CurrentStamina}/{_stats.MaxStamina} | {needsText}\n" +
+			$"{zoneText} | {baseText} | Бег: {(_isSprinting ? "да" : "нет")}\n" +
 			$"{interactionText}\n" +
 			$"{_lastCombatMessage}";
 	}
@@ -208,7 +222,25 @@ public partial class PlayerController : CharacterBody2D
 	private void UpdateMovement(float delta)
 	{
 		Vector2 inputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-		Vector2 targetVelocity = inputDirection * MoveSpeed;
+		bool wantsSprint = Input.IsActionPressed("sprint") && inputDirection != Vector2.Zero && _stats.CurrentStamina > 0;
+		_isSprinting = wantsSprint;
+		if (_isSprinting)
+		{
+			_sprintSpendBuffer += delta * 18f;
+			int staminaCost = Mathf.FloorToInt(_sprintSpendBuffer);
+			if (staminaCost > 0)
+			{
+				_isSprinting = _stats.TrySpendStamina(staminaCost);
+				_sprintSpendBuffer -= staminaCost;
+			}
+		}
+		else
+		{
+			_sprintSpendBuffer = 0f;
+		}
+
+		float speedMultiplier = _isSprinting ? 1.45f : 1.0f;
+		Vector2 targetVelocity = inputDirection * MoveSpeed * speedMultiplier;
 
 		float speed = inputDirection == Vector2.Zero ? Deceleration : Acceleration;
 		Velocity = Velocity.MoveToward(targetVelocity, speed * delta);
@@ -442,12 +474,19 @@ public partial class PlayerController : CharacterBody2D
 	{
 		_meleeCooldown = Mathf.Max(0f, _meleeCooldown - delta);
 
-		_staminaRegenBuffer += delta * 18f;
-		int staminaToRestore = Mathf.FloorToInt(_staminaRegenBuffer);
-		if (staminaToRestore > 0)
+		if (!_isSprinting)
 		{
-			_stats.RestoreStamina(staminaToRestore);
-			_staminaRegenBuffer -= staminaToRestore;
+			_staminaRegenBuffer += delta * 14f;
+			int staminaToRestore = Mathf.FloorToInt(_staminaRegenBuffer);
+			if (staminaToRestore > 0)
+			{
+				_stats.RestoreStamina(staminaToRestore);
+				_staminaRegenBuffer -= staminaToRestore;
+			}
+		}
+		else
+		{
+			_staminaRegenBuffer = 0f;
 		}
 
 		if (_combatMessageTimer > 0f)
@@ -518,6 +557,21 @@ public partial class PlayerController : CharacterBody2D
 		_combatMessageTimer = Mathf.Max(0.1f, duration);
 	}
 
+	private void UpdateSurvivalNeeds(float delta)
+	{
+		_needsTickBuffer += delta;
+		if (_needsTickBuffer < 8f)
+			return;
+
+		SurvivalNeedsUpdateResult result = SurvivalNeedsLogic.Tick(_needs, _stats, _needsTickBuffer, IsInsideBase);
+		_needsTickBuffer = 0f;
+
+		if (result.IsCritical)
+			SetCombatMessage(result.HealthLost > 0 ? $"Голод/жажда наносят урон: {result.HealthLost}" : "Критический голод или жажда", 1.4f);
+		else if (_needs.IsHungry || _needs.IsThirsty)
+			SetCombatMessage("Нужна еда или вода. H — быстрый расходник", 1.4f);
+	}
+
 	private void ResetInteractionProgress()
 	{
 		_interactionHoldState.Reset();
@@ -555,7 +609,30 @@ public partial class PlayerController : CharacterBody2D
 	{
 		ItemEntry entry = _inventory?.GetEntryAt(slotIndex);
 		if (entry == null || entry.IsEmpty() || entry.Item == null) return false;
-		return InventoryUseLogic.TryUseConsumableFromSlot(_inventory.GetLogicState(), slotIndex, entry.Item, _stats);
+		bool used = InventoryUseLogic.TryUseConsumableFromSlot(_inventory.GetLogicState(), slotIndex, entry.Item, _stats, _needs);
+		if (used) SetCombatMessage($"Использовано: {entry.Item.DisplayName}", 1.2f);
+		return used;
+	}
+
+	public bool TryUseBestConsumable()
+	{
+		if (_inventory == null) return false;
+		for (int i = 0; i < _inventory.MaxSlots; i++)
+		{
+			ItemEntry entry = _inventory.GetEntryAt(i);
+			if (entry == null || entry.IsEmpty() || entry.Item == null || !entry.Item.CanUse()) continue;
+
+			bool wantsHealth = entry.Item.HealthRestore > 0 && _stats.CurrentHealth < _stats.MaxHealth;
+			bool wantsFood = entry.Item.FoodRestore > 0 && _needs.Food < _needs.MaxFood;
+			bool wantsWater = entry.Item.WaterRestore > 0 && _needs.Water < _needs.MaxWater;
+			bool wantsStamina = entry.Item.StaminaRestore > 0 && _stats.CurrentStamina < _stats.MaxStamina;
+			if (!wantsHealth && !wantsFood && !wantsWater && !wantsStamina) continue;
+
+			return TryUseInventorySlot(i);
+		}
+
+		SetCombatMessage("Нет подходящего расходника для H", 1.1f);
+		return false;
 	}
 
 	public int ApplyDamage(int damage)

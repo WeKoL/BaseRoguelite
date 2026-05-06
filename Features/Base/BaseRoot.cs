@@ -63,7 +63,7 @@ public partial class BaseRoot : Node2D
 		ItemData output = catalog.GetOrFallback(recipe.OutputItemId);
 		_storage.RememberItem(output);
 		var definition = new InventoryItemDefinition(output.Id, output.MaxStackSize, output.Weight);
-		return CraftingLogic.TryCraft(_storage.GetLogicState(), recipe, definition, recipe.OutputAmount);
+		return CraftingLogic.TryCraft(_storage.GetLogicState(), recipe, definition, recipe.OutputAmount, _progress);
 	}
 
 	private void OnSafeZoneBodyEntered(Node2D body)

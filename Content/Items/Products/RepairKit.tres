@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+[ext_resource type="Script" uid="uid://d1uyn18yyoa8v" path="res://Core/Items/ItemData.cs" id="1_itemdata"]
+[resource]
+script = ExtResource("1_itemdata")
+Id = "repair_kit"
+DisplayName = "Ремонтный набор"
+Description = "Расходный набор для будущей системы ремонта экипировки."
+Category = 2
+Rarity = 1
+MaxStackSize = 10
+Weight = 1.0
+UsageHint = "Пока крафтится и хранится на базе; ремонт будет расширяться в следующих версиях."
+metadata/_custom_type_script = "uid://d1uyn18yyoa8v"

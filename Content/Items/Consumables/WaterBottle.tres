@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+[ext_resource type="Script" uid="uid://d1uyn18yyoa8v" path="res://Core/Items/ItemData.cs" id="1_itemdata"]
+[resource]
+script = ExtResource("1_itemdata")
+Id = "water_bottle"
+DisplayName = "Бутылка воды"
+Description = "Чистая вода для вылазки. Восстанавливает жажду."
+Category = 2
+MaxStackSize = 8
+Weight = 0.6
+UsageHint = "ПКМ → Использовать или H для быстрого расходника."
+IsConsumable = true
+WaterRestore = 40
+metadata/_custom_type_script = "uid://d1uyn18yyoa8v"

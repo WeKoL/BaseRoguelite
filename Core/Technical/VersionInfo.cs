@@ -1,6 +1,6 @@
 public static class VersionInfo
 {
-	public const string Version = "3.0";
-	public const string SaveVersion = "3";
-	public const string BranchSummary = "Версия 3.0: очереди крафта, автоплан хранилища, выживание, ИИ боя, энергия базы, миграции сохранений, цепочки квестов и расширенные тесты.";
+	public const string Version = "0.4.0";
+	public const string SaveVersion = "6";
+	public const string BranchSummary = "Версия 0.4.0: логическое ядро игры. Добавлен независимый слой Core/Version040Logic: инвентарь, экипировка, хранилище, крафт, выживание, добыча, бой, мир, база, квесты, сохранения, UI-модели, feedback и quality gate без обязательной привязки к новым Godot-сценам.";
 }

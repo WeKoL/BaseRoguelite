@@ -15,6 +15,9 @@ public partial class ItemData : Resource
 
 	[Export] public bool IsConsumable { get; set; } = false;
 	[Export] public int HealthRestore { get; set; } = 0;
+	[Export] public int FoodRestore { get; set; } = 0;
+	[Export] public int WaterRestore { get; set; } = 0;
+	[Export] public int StaminaRestore { get; set; } = 0;
 
 	[Export] public bool IsEquippable { get; set; } = false;
 	[Export] public EquipmentSlotId EquipSlotId { get; set; } = EquipmentSlotId.Head;
@@ -22,7 +25,7 @@ public partial class ItemData : Resource
 
 	public bool CanUse()
 	{
-		return IsConsumable && HealthRestore > 0;
+		return IsConsumable && (HealthRestore > 0 || FoodRestore > 0 || WaterRestore > 0 || StaminaRestore > 0);
 	}
 
 	public bool CanEquip()

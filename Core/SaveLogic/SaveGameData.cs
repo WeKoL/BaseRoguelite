@@ -1,12 +1,17 @@
 using System.Collections.Generic;
+
 public sealed class SaveGameData
 {
-	public int Version { get; set; } = 3;
+	public int Version { get; set; } = 5;
 	public string BuildVersion { get; set; } = VersionInfo.Version;
 	public int PlayerHealth { get; set; }
 	public int PlayerMaxHealth { get; set; }
 	public int PlayerStamina { get; set; }
 	public int PlayerMaxStamina { get; set; }
+	public int PlayerFood { get; set; } = 100;
+	public int PlayerMaxFood { get; set; } = 100;
+	public int PlayerWater { get; set; } = 100;
+	public int PlayerMaxWater { get; set; } = 100;
 	public int BaseLevel { get; set; }
 	public int ExpeditionElapsedSeconds { get; set; }
 	public List<SaveSlotItemData> InventoryItems { get; set; } = new();
